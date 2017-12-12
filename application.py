@@ -38,7 +38,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-
+# Google and FB authentication code uses approach from the lessons
 # Create anti-forgery state token
 @app.route('/login')
 def showLogin():
