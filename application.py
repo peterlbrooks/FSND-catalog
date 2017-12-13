@@ -7,7 +7,12 @@ from flask import session as login_session
 from sqlalchemy import create_engine, asc, desc, and_
 from sqlalchemy.orm import sessionmaker
 from models import Base, Category, CategoryItem, User
-import random, datetime, string, json, requests, httplib2
+import random
+import datetime
+import string
+import json
+import requests
+import httplib2
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 
 app = Flask(__name__)
@@ -40,6 +45,8 @@ session = DBSession()
 
 # Google and FB authentication code uses approach from the lessons
 # Create anti-forgery state token
+
+
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -62,7 +69,8 @@ def fbconnect():
     app_secret = json.loads(
         open('fb_client_secrets.json', 'r').read())['web']['app_secret']
 
-    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' %(app_id, app_secret, access_token)
+    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (
+        app_id, app_secret, access_token)
 
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
@@ -366,32 +374,32 @@ def newItem(categoryName):
         name=categoryName).one()
 
     if request.method == 'POST':
-            name = request.form['name']
-            description = request.form['description']
-            if name and description:
-                newCategoryID = (request.form.get('category'))
-                newCategory = session.query(Category).filter_by(
-                    id=newCategoryID).one()
-                newItem = CategoryItem(
-                    name=name,
-                    description=description,
-                    categoryOwnerID=newCategory.id,
-                    categoryOwnerName=newCategory.name,
-                    dateUpdated=datetime.datetime.utcnow(),
-                    creatorID=login_session['user_id'])
-                session.add(newItem)
-                session.commit()
-                # flash('New  %s Item Successfully Created' % (newItem.name))
-                return redirect(url_for('showCatalog'))
-            else:
-                flash('Please enter data in all fields')
-                cancel_URL = url_for(
-                    'showCategoryItems', categoryName=categoryName)
-                return render_template(
-                    'newItem.html',
-                    categoryName=categoryName,
-                    itemName=name, itemDescription=description,
-                    cancel_URL=cancel_URL, categories=categories)
+        name = request.form['name']
+        description = request.form['description']
+        if name and description:
+            newCategoryID = (request.form.get('category'))
+            newCategory = session.query(Category).filter_by(
+                id=newCategoryID).one()
+            newItem = CategoryItem(
+                name=name,
+                description=description,
+                categoryOwnerID=newCategory.id,
+                categoryOwnerName=newCategory.name,
+                dateUpdated=datetime.datetime.utcnow(),
+                creatorID=login_session['user_id'])
+            session.add(newItem)
+            session.commit()
+            # flash('New  %s Item Successfully Created' % (newItem.name))
+            return redirect(url_for('showCatalog'))
+        else:
+            flash('Please enter data in all fields')
+            cancel_URL = url_for(
+                'showCategoryItems', categoryName=categoryName)
+            return render_template(
+                'newItem.html',
+                categoryName=categoryName,
+                itemName=name, itemDescription=description,
+                cancel_URL=cancel_URL, categories=categories)
 
     else:
         cancel_URL = url_for('showCategoryItems', categoryName=categoryName)
