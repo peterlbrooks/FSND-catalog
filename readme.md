@@ -1,5 +1,6 @@
 Catalog App
 
+TO RUN you need to copy secrets file from catalog-secrets folder to this folder
 
 In general:
 
