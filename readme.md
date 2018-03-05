@@ -13,8 +13,8 @@ In general:
 To start:
 - Per instructions it is assumed you have python and vagrant installed
 
-1. Copy the entire folder and subfolder structure from github to your computer
-2. From the app home directory:
+1. Copy the entire folder and subfolder structure from github to a directory on your computer
+2. In a terminal screen, navigate to the this app home directory:
     - Start up vagrant: vagrant up
     - Start the app: python application.py
         - Click on "allow" if any network requests appear
@@ -23,9 +23,20 @@ To start:
 5. The main page should appear
 
 
+Error Handling
+
+1. If applicatiion.py won't start because the port is already being used:
+- lsof -i tcp:xxxx
+- kill -9 <PID> #where <PID> is the process id returned by lsof
+
+2. Rarely, you may need to clean up the browser and app
+- clean out your browser buffer
+- in the app terminal screen, control-c to stop the app and restart using python application.py
+- log in to the app from the browser again
+
 Database
 
-A database withe categories is included. If you wish to recreate the database from scratch:
+A database with categories is included. If you wish to recreate the database from scratch, from the terminal screen:
 
 1. Erase the existing database: delete catalog.db
 2. Create the DB: python models.py
